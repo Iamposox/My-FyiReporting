@@ -517,8 +517,8 @@ namespace fyiReporting.RDL
                     v = "lr_tb";
                 }
                 else if (v == "tb-lr")
-                {
-	                v = "tb_lr";
+                { 
+                    v = "tb_lr";
                 }
                 w = (WritingModeEnum)Enum.Parse(typeof(WritingModeEnum), v);
             }
@@ -848,9 +848,9 @@ namespace fyiReporting.RDL
 
 	public enum WritingModeEnum
 	{
-        lr_tb,				// left right - top bottom
+		lr_tb,				// left right - top bottom
 		tb_rl,				// top bottom - right left
-		tb_lr               // top bottom - left right
+		tb_lr				// top bottom - left right
 	}
 
 	public enum UnicodeBiDirectionalEnum

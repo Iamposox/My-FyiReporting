@@ -317,17 +317,17 @@ namespace fyiReporting.RdlGtkViewer
         {
             StyleInfo si = pt.SI;
             string s = pt.Text;
-            
+
             g.Save();
 
-            layout = Pango.CairoHelper.CreateLayout(g);
-            
-            float fontsize = (si.FontSize * 72 / 96);
-            var font = Pango.FontDescription.FromString(string.Format("{0} {1}", si.GetFontFamily().Name,  
-                               fontsize * PixelsX(1)));
+            layout = CairoHelper.CreateLayout(g);
+
+            float fontsize = si.FontSize * 72f / 96f;
+            var font = FontDescription.FromString(string.Format("{0} {1}", si.GetFontFamily().Name,
+                fontsize * PixelsX(1)));
             if (si.FontStyle == FontStyleEnum.Italic)
-                font.Style = Pango.Style.Italic;
-            
+                font.Style = Style.Italic;
+
             switch (si.FontWeight)
             {
                 case FontWeightEnum.Bold:
@@ -337,39 +337,39 @@ namespace fyiReporting.RdlGtkViewer
                 case FontWeightEnum.W700:
                 case FontWeightEnum.W800:
                 case FontWeightEnum.W900:
-                    font.Weight = Pango.Weight.Bold;
+                    font.Weight = Weight.Bold;
                     break;
             }
-				
-            Pango.FontDescription oldfont = layout.FontDescription;
+
+            FontDescription oldfont = layout.FontDescription;
             layout.FontDescription = font;
 
             switch (si.TextAlign)
             {
                 case TextAlignEnum.Right:
-                    layout.Alignment = Pango.Alignment.Right;
+                    layout.Alignment = Alignment.Right;
                     break;
                 case TextAlignEnum.Center:
-                    layout.Alignment = Pango.Alignment.Center;
+                    layout.Alignment = Alignment.Center;
                     break;
                 case TextAlignEnum.Left:
                 default:
-                    layout.Alignment = Pango.Alignment.Left;
+                    layout.Alignment = Alignment.Left;
                     break;
             }
-				
-            layout.Width = Pango.Units.FromPixels((int)(r.Width - si.PaddingLeft - si.PaddingRight - 2));
+
+            layout.Width = Units.FromPixels((int)(r.Width - si.PaddingLeft - si.PaddingRight - 2));
             layout.Wrap = WrapMode.WordChar;
             layout.SetText(s);
 
-            Pango.Rectangle logical;
-            Pango.Rectangle ink;
+            Rectangle logical;
+            Rectangle ink;
             layout.GetExtents(out ink, out logical);
-            double height = logical.Height / Pango.Scale.PangoScale;
+            double height = logical.Height / Scale.PangoScale;
             double y = 0;
             switch (si.VerticalAlign)
             {
-                case VerticalAlignEnum.Top: 
+                case VerticalAlignEnum.Top:
                     y = r.Y + si.PaddingTop;
                     break;
                 case VerticalAlignEnum.Middle:
@@ -379,22 +379,22 @@ namespace fyiReporting.RdlGtkViewer
                     y = r.Y + (r.Height - height) - si.PaddingBottom;
                     break;
             }
+
             // draw the background 
             DrawBackground(g, r, si);
 
             Cairo.Rectangle box = new Cairo.Rectangle(
-                                      r.X + si.PaddingLeft + 1,
-                                      y,
-                                      r.Width,
-                                      r.Height);
+                r.X + si.PaddingLeft + 1,
+                y,
+                r.Width,
+                r.Height);
 
             g.Color = si.Color.ToCairoColor();
-            
-            // g.MoveTo(- ((double)width / 1024) / 2, -250);
-                g.MoveTo(box.X, box.Y);
 
-            Pango.CairoHelper.ShowLayout(g, layout);
-			
+            g.MoveTo(box.X, box.Y);
+
+            CairoHelper.ShowLayout(g, layout);
+
             layout.FontDescription = oldfont;
             g.Restore();
         }
@@ -403,16 +403,16 @@ namespace fyiReporting.RdlGtkViewer
         {
             StyleInfo si = pt.SI;
             string s = pt.Text;
-            
+
             g.Save();
 
-            layout = Pango.CairoHelper.CreateLayout(g);
-            
+            layout = CairoHelper.CreateLayout(g);
+
             //Pango fonts are scaled to 72dpi, Windows fonts uses 96dpi
-            float fontsize = (si.FontSize * 72 / 96);
-            var font = Pango.FontDescription.FromString($"{si.GetFontFamily().Name} {fontsize * PixelsX(1)}");
+            float fontsize = si.FontSize * 72f / 96f;
+            var font = FontDescription.FromString($"{si.GetFontFamily().Name} {fontsize * PixelsX(1)}");
             if (si.FontStyle == FontStyleEnum.Italic)
-                font.Style = Pango.Style.Italic;
+                font.Style = Style.Italic;
 
             switch (si.FontWeight)
             {
@@ -423,39 +423,39 @@ namespace fyiReporting.RdlGtkViewer
                 case FontWeightEnum.W700:
                 case FontWeightEnum.W800:
                 case FontWeightEnum.W900:
-                    font.Weight = Pango.Weight.Bold;
-                    break;
-            }
-				
-            Pango.FontDescription oldfont = layout.FontDescription;
-            layout.FontDescription = font;
-            
-            switch (si.TextAlign)
-            {
-                case TextAlignEnum.Right:
-                    layout.Alignment = Pango.Alignment.Right;
-                    break;
-                case TextAlignEnum.Center:
-                    layout.Alignment = Pango.Alignment.Center;
-                    break;
-                case TextAlignEnum.Left:
-                default:
-                    layout.Alignment = Pango.Alignment.Left;
+                    font.Weight = Weight.Bold;
                     break;
             }
 
-            layout.Width = Pango.Units.FromPixels((int)(r.Height - si.PaddingTop - si.PaddingBottom - 2));
-            
+            FontDescription oldfont = layout.FontDescription;
+            layout.FontDescription = font;
+
+            switch (si.TextAlign)
+            {
+                case TextAlignEnum.Right:
+                    layout.Alignment = Alignment.Right;
+                    break;
+                case TextAlignEnum.Center:
+                    layout.Alignment = Alignment.Center;
+                    break;
+                case TextAlignEnum.Left:
+                default:
+                    layout.Alignment = Alignment.Left;
+                    break;
+            }
+
+            layout.Width = Units.FromPixels((int)(r.Height - si.PaddingTop - si.PaddingBottom - 2));
+
             layout.Wrap = WrapMode.WordChar;
             layout.SetText(s);
-            
-            Pango.Rectangle logical;
-            Pango.Rectangle ink;
+
+            Rectangle logical;
+            Rectangle ink;
             layout.GetExtents(out ink, out logical);
-            double height = logical.Height / Pango.Scale.PangoScale;
+            double height = logical.Height / Scale.PangoScale;
             double y = 0;
             double x = 0;
-            
+
             switch (si.VerticalAlign)
             {
                 case VerticalAlignEnum.Top:
@@ -468,42 +468,42 @@ namespace fyiReporting.RdlGtkViewer
                     x = r.X + height + si.PaddingLeft;
                     break;
             }
+
             // draw the background 
             DrawBackground(g, r, si);
-           
+
             Cairo.Rectangle box = new Cairo.Rectangle(
-                                      x,
-                                      r.Y + si.PaddingTop + 1,
-                                      r.Width,
-                                      r.Height);
+                x,
+                r.Y + si.PaddingTop + 1,
+                r.Width,
+                r.Height);
 
             g.Color = si.Color.ToCairoColor();
             
-            
             g.Rotate(90 * Math.PI / 180.0);
-            Pango.CairoHelper.UpdateLayout(g,layout);
+            CairoHelper.UpdateLayout(g, layout);
 
             g.MoveTo(box.Y, -box.X);
-            Pango.CairoHelper.ShowLayout(g, layout);
-			
+            CairoHelper.ShowLayout(g, layout);
+
             layout.FontDescription = oldfont;
             g.Restore();
-            
         }
+
         private void DrawStringTBLR(PageText pt, Cairo.Context g, Cairo.Rectangle r)
         {
             StyleInfo si = pt.SI;
             string s = pt.Text;
-            
+
             g.Save();
 
-            layout = Pango.CairoHelper.CreateLayout(g);
-            
+            layout = CairoHelper.CreateLayout(g);
+
             //Pango fonts are scaled to 72dpi, Windows fonts uses 96dpi
             float fontsize = (si.FontSize * 72 / 96);
-            var font = Pango.FontDescription.FromString($"{si.GetFontFamily().Name} {fontsize * PixelsX(1)}");
+            var font = FontDescription.FromString($"{si.GetFontFamily().Name} {fontsize * PixelsX(1)}");
             if (si.FontStyle == FontStyleEnum.Italic)
-                font.Style = Pango.Style.Italic;
+                font.Style = Style.Italic;
 
             switch (si.FontWeight)
             {
@@ -514,39 +514,39 @@ namespace fyiReporting.RdlGtkViewer
                 case FontWeightEnum.W700:
                 case FontWeightEnum.W800:
                 case FontWeightEnum.W900:
-                    font.Weight = Pango.Weight.Bold;
-                    break;
-            }
-				
-            Pango.FontDescription oldfont = layout.FontDescription;
-            layout.FontDescription = font;
-            
-            switch (si.TextAlign)
-            {
-                case TextAlignEnum.Right:
-                    layout.Alignment = Pango.Alignment.Right;
-                    break;
-                case TextAlignEnum.Center:
-                    layout.Alignment = Pango.Alignment.Center;
-                    break;
-                case TextAlignEnum.Left:
-                default:
-                    layout.Alignment = Pango.Alignment.Left;
+                    font.Weight = Weight.Bold;
                     break;
             }
 
-            layout.Width = Pango.Units.FromPixels((int)(r.Height - si.PaddingTop - si.PaddingBottom - 2));
-            
+            FontDescription oldfont = layout.FontDescription;
+            layout.FontDescription = font;
+
+            switch (si.TextAlign)
+            {
+                case TextAlignEnum.Right:
+                    layout.Alignment = Alignment.Right;
+                    break;
+                case TextAlignEnum.Center:
+                    layout.Alignment = Alignment.Center;
+                    break;
+                case TextAlignEnum.Left:
+                default:
+                    layout.Alignment = Alignment.Left;
+                    break;
+            }
+
+            layout.Width = Units.FromPixels((int)(r.Height - si.PaddingTop - si.PaddingBottom - 2));
+
             layout.Wrap = WrapMode.WordChar;
             layout.SetText(s);
-            
-            Pango.Rectangle logical;
-            Pango.Rectangle ink;
+
+            Rectangle logical;
+            Rectangle ink;
             layout.GetExtents(out ink, out logical);
-            double height = logical.Height / Pango.Scale.PangoScale;
+            double height = logical.Height / Scale.PangoScale;
             double y = 0;
             double x = 0;
-            
+
             switch (si.VerticalAlign)
             {
                 case VerticalAlignEnum.Top:
@@ -559,27 +559,26 @@ namespace fyiReporting.RdlGtkViewer
                     x = r.X + (r.Width - height) + si.PaddingLeft;
                     break;
             }
+
             // draw the background 
             DrawBackground(g, r, si);
-           
+
             Cairo.Rectangle box = new Cairo.Rectangle(
-                                      x,
-                                      r.Y + r.Height - si.PaddingBottom - 1,
-                                      r.Height - si.PaddingBottom - si.PaddingTop,
-                                      r.Width - si.PaddingLeft + si.PaddingRight);
+                x,
+                r.Y + r.Height - si.PaddingBottom - 1,
+                r.Height - si.PaddingBottom - si.PaddingTop,
+                r.Width - si.PaddingLeft + si.PaddingRight);
 
             g.Color = si.Color.ToCairoColor();
-            
-            
+
             g.Rotate(270 * Math.PI / 180.0);
-            Pango.CairoHelper.UpdateLayout(g,layout);
+            CairoHelper.UpdateLayout(g, layout);
 
             g.MoveTo(-box.Y, box.X);
-            Pango.CairoHelper.ShowLayout(g, layout);
-			
+            CairoHelper.ShowLayout(g, layout);
+
             layout.FontDescription = oldfont;
             g.Restore();
-            
         }
         
         private void DrawBackground(Cairo.Context g, Cairo.Rectangle rect, StyleInfo si)
